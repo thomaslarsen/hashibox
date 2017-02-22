@@ -1,0 +1,2 @@
+alias creds='source /git/DT/providers-common-np/aws/common/provisioner/aws_temporary_creds/getCreds.sh'
+alias credsNp='creds np write'
