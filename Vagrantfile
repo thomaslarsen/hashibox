@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "bento/centos-7.1"
+  config.vm.box = "bento/centos-7.2"
 
   config.vm.hostname = "hashibox"
 
@@ -39,7 +39,8 @@ Vagrant.configure("2") do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  config.vm.synced_folder "/Volumes/Crypt disk/Work/Home Office/git", "/git"
+  config.vm.synced_folder "/Volumes/Repo/HO", "/git"
+  config.vm.synced_folder "/Volumes/Crypt\ disk/Work/Home\ Office/git", "/old"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -70,7 +71,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "shell", inline: <<-SHELL
    yum -y install epel-release
-   yum -y install jq git unzip
+   yum -y install jq git unzip ntp bash-completion
 
    if [ ! -e /usr/local/bin/vault ]; then
      wget https://releases.hashicorp.com/vault/0.6.4/vault_0.6.4_linux_amd64.zip
@@ -107,17 +108,12 @@ Vagrant.configure("2") do |config|
      rm -rf awscli-*
    fi
 
-   if [ ! -e /usr/bin/pip ]; then
-     easy_install pip
-     pip install boto3
-     pip install openpyxl
-   fi
+
 
 
    if [ ! -e /etc/profile.d/ipt_aliases.sh ]; then
      cp -f /tmp/ipt_aliases.sh /etc/profile.d/ipt_aliases.sh
      echo "export TF_VAR_created_by=ENV['USER']" >> /etc/profile.d/ipt_aliases.sh
-     echo "export PATH=$PATH:/git/DC/aws-tf-generator/bin/" >> /home/vagrant/.bash_profile
    fi
   SHELL
 end
